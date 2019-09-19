@@ -20,12 +20,28 @@ objects:
   kind: ServiceAccount
   metadata:
     name: prometheus
+- kind: RoleBinding
+  apiVersion: rbac.authorization.k8s.io/v1
+  metadata:
+    name: custom-prometheus
+  subjects:
+    - kind: ServiceAccount
+      name: prometheus
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: custom-prometheus
 - apiVersion: monitoring.coreos.com/v1
   kind: Prometheus
   metadata:
-    name: prometheus
+    name: prometheus-${MONITOR_GROUP}
   spec:
     serviceAccountName: prometheus
+    alerting:
+      alertmanagers:
+      - name: ${MONITOR_GROUP}
+        namespace: ${NAMESPACE}
+        port: web
     serviceMonitorSelector:
       matchLabels:
         monitor: ${MONITOR_GROUP}
@@ -33,7 +49,49 @@ objects:
       requests:
         memory: 400Mi
     enableAdminAPI: false
+- apiVersion: monitoring.coreos.com/v1
+  kind: Alertmanager
+  metadata:
+    name: ${MONITOR_GROUP}
+  spec:
+    replicas: 3
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: alertmanager-${MONITOR_GROUP}
+  stringData:
+    alertmanager.yaml: |-
+      global:
+        resolve_timeout: 5m
+      route:
+        group_by: ['job']
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 12h
+        receiver: 'webhook'
+      receivers:
+      - name: 'webhook'
+        webhook_configs:
+        - url: 'http://alertmanagerwh:30500/'
+- kind: Route
+  apiVersion: route.openshift.io/v1
+  metadata:
+    name: alertmanager-${MONITOR_GROUP}
+  spec:
+    to:
+      kind: Service
+      name: alertmanager-operated
+      weight: 100
+    port:
+      targetPort: web
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+    wildcardPolicy: None
 parameters:
+- name: NAMESPACE
+  description: "Namespace this is being deployed in so Prometheus could reference AlertManager"
+  required: true
 - name: MONITOR_GROUP
   description: "Will be used to match resoruces to monitor that are labled with 'monitor: MONITOR_GROUP'"
   required: true
