@@ -15,9 +15,7 @@ Since OpenShift ships with a running version of the Prometheus Operator in the o
 
 0. clone this repository
 ```
-cd ~
 git clone https://github.com/itewk/openshift-custom-scoped-monitoring.git
-cd openshift-custom-scoped-monitoring
 ```
 1. log in as cluster admin
 2. switch to the project for putting cluster wide operators
@@ -26,11 +24,11 @@ oc project openshift-operators
 ```
 3. create the custom prometheus operator
 ```
-oc create -f custom-prometehus-operator.yml -n openshift-operators
+oc create -f openshift-custom-scoped-monitoring/custom-prometehus-operator.yml -n openshift-operators
 ```
 4. create the template for creating custom monitoring stacks
 ```
-oc apply -f custom-monitoring-template.yml -n openshift
+oc apply -f openshift-custom-scoped-monitoring/custom-monitoring-template.yml -n openshift
 ```
 
 ### Create the Grafana Operator
@@ -38,9 +36,7 @@ These are based on https://github.com/integr8ly/grafana-operator/blob/master/doc
 
 0. clone the operator repository
 ```
-cd ~
 git clone https://github.com/integr8ly/grafana-operator.git
-cd grafana-operator
 ```
 1. log in as cluster admin
 2. switch to the project for putting cluster wide operators
@@ -49,15 +45,15 @@ oc project openshift-operators
 ```
 3. Create the custom resource definitions that the operator uses:
 ```
-oc create -f deploy/crds
+oc create -f grafana-operator/deploy/crds
 ```
-4. Create the operator roles:
+4. Create the operator cluster roles:
 ```
-oc create -f deploy/roles -n openshift-operators
+oc create -f openshift-custom-scoped-monitoring/grafana-cluster-roles.yml -n openshift-operators
 ```
 5. Deploy the operator
 ```
-oc create -f deploy/operator.yaml -n openshift-operators
+oc create -f grafana-operator/deploy/operator.yaml -n openshift-operators
 ```
 
 ### Create Team Scopped Monitoring Stack
