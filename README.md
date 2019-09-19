@@ -22,7 +22,11 @@ cd openshift-custom-scoped-monitoring
 2. `oc project openshift-operators`
 3. create the custom prometheus operator
 ```
-oc create -f custom-prometehus-operator.yml
+oc create -f custom-prometehus-operator.yml -n openshift-operators
+```
+4. create the template for creating custom monitoring stacks
+```
+oc apply -f custom-monitoring-template.yml -n openshift
 ```
 
 ### Create Team Scopped Monitoring Stack
@@ -39,5 +43,16 @@ oc new-project team-MY_TEAM-monitoring
 ```
 3. create prometheus resources
 ```
-TODO
+oc process openshift//custom-monitoring MONITOR_GROUP=team-a | oc create -f -
+```
+
+### Clean Up
+#### clean up custom operators
+```
+oc delete -f custom-prometehus-operator.yml -n openshift-operators
+```
+
+#### clean up specific monitoring stack
+```
+oc process openshift//custom-monitoring MONITOR_GROUP=team-a | oc delete -f -
 ```
