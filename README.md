@@ -55,6 +55,10 @@ oc create -f deploy/crds
 ```
 oc create -f deploy/roles -n openshift-operators
 ```
+5. Deploy the operator
+```
+oc create -f deploy/operator.yaml -n openshift-operators
+```
 
 ### Create Team Scopped Monitoring Stack
 
