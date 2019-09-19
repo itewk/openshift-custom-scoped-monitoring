@@ -88,6 +88,21 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
+- kind: Route
+  apiVersion: route.openshift.io/v1
+  metadata:
+    name: prometheus-${MONITOR_GROUP}
+  spec:
+    to:
+      kind: Service
+      name: prometheus-operated
+      weight: 100
+    port:
+      targetPort: web
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+    wildcardPolicy: None
 parameters:
 - name: NAMESPACE
   description: "Namespace this is being deployed in so Prometheus could reference AlertManager"
