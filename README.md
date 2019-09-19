@@ -24,3 +24,20 @@ cd openshift-team-scoped-monitoring
 ```
 oc create -f custom-prometehus-operator.yml
 ```
+
+### Create Team Scopped Monitoring Stack
+
+0. clone this repository
+```
+git clone https://github.com/itewk/openshift-team-scoped-monitoring.git
+cd openshift-team-scoped-monitoring
+```
+1. log in as "normal" user
+2. create team specific monitoring project
+```
+oc new-project team-MY_TEAM-monitoring
+```
+3. create prometheus resources
+```
+TODO
+```
