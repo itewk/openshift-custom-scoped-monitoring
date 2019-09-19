@@ -15,8 +15,8 @@ Since OpenShift ships with a running version of the Prometheus Operator in the o
 
 0. clone this repository
 ```
-git clone https://github.com/itewk/openshift-team-scoped-monitoring.git
-cd openshift-team-scoped-monitoring
+git clone https://github.com/itewk/openshift-custom-scoped-monitoring.git
+cd openshift-custom-scoped-monitoring
 ```
 1. log in as cluster admin
 2. `oc project openshift-operators`
