@@ -14,6 +14,7 @@ metadata:
     tags: builder,monitoring,prometheus,grafana
 labels:
   template: custom-monitoring
+  monitoring: custom
 objects:
 - apiVersion: v1
   kind: ServiceAccount
