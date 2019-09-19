@@ -39,11 +39,13 @@ cd openshift-team-scoped-monitoring
 1. log in as "normal" user
 2. create team specific monitoring project
 ```
-oc new-project team-MY_TEAM-monitoring
+export GROUP=
+export MONITORING_NAMESPACE=${GROUP}-monitoring
+oc new-project ${MONITORING_PROJECT}
 ```
 3. create prometheus resources
 ```
-oc process openshift//custom-monitoring MONITOR_GROUP=team-a | oc create -f -
+oc process openshift//custom-monitoring MONITOR_GROUP=${GROUP} NAMESPACE=${MONITORING_NAMESPACE} | oc create -n ${MONITORING_NAMESPACE} -f -
 ```
 
 ### Clean Up
