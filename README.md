@@ -34,27 +34,7 @@ oc apply -f openshift-custom-scoped-monitoring/custom-monitoring-template.yml -n
 ### Create the Grafana Operator
 These are based on https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md.
 
-0. clone the operator repository
-```
-git clone https://github.com/integr8ly/grafana-operator.git
-```
-1. log in as cluster admin
-2. switch to the project for putting cluster wide operators
-```
-oc project openshift-operators
-```
-3. Create the custom resource definitions that the operator uses:
-```
-oc create -f grafana-operator/deploy/crds
-```
-4. Create the operator cluster roles:
-```
-oc create -f openshift-custom-scoped-monitoring/grafana-cluster-roles.yml -n openshift-operators
-```
-5. Deploy the operator
-```
-oc create -f grafana-operator/deploy/operator.yaml -n openshift-operators
-```
+TO DO
 
 ### Create Team Scopped Monitoring Stack
 
