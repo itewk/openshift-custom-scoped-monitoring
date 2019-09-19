@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: custom-monitoring-template
+  name: custom-monitoring
   annotations:
     description: >-
       Teamplate for creating a monitoring stack for watching a given group of specific labeled resources.
@@ -9,9 +9,16 @@ metadata:
       Teamplate for creating a monitoring stack for watching a given group of specific labeled resources.
     openshift.io/documentation-url: https://github.com/itewk/openshift-team-scoped-monitoring
     openshift.io/provider-display-name: Ian Tewksbury
+    template.openshift.io/bindable: "false"
     iconClass: "fa-tachometer"
-    tags: "monitoring,prometheus,grafana"
+    tags: builder,monitoring,prometheus,grafana
+labels:
+  template: custom-monitoring
 objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: prometheus
 - apiVersion: monitoring.coreos.com/v1
   kind: Prometheus
   metadata:
@@ -27,4 +34,5 @@ objects:
     enableAdminAPI: false
 parameters:
 - name: MONITOR_GROUP
-  description: Will be used to match resoruces to monitor that are labled with "monitor: MONITOR_GROUP"
+  description: "Will be used to match resoruces to monitor that are labled with 'monitor: MONITOR_GROUP'"
+  required: true
